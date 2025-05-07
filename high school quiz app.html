@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>公立進学校クイズ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <audio id="click-sound" src="click.mp3" preload="auto"></audio>
+    <audio id="correct-sound" src="correct.mp3" preload="auto"></audio>
+    <audio id="incorrect-sound" src="incorrect.mp3" preload="auto"></audio>
+    <audio id="special-sound" src="special-effect.mp3" preload="auto"></audio>
+    <div class="container" id="start-screen">
+        <h1>公立進学校クイズ</h1>
+        <p>・このゲームは進学実績をもとにお題の高校を当てるゲームです。</p>
+        <p>・勉強モードではお題となる高校の進学実績を閲覧することができます。</p>
+        <p>※このゲームは2025年のデータを使用しています。</p>
+        <button class="button start" onclick="playClickSound(); showDifficultyScreen()">ゲーム開始</button>
+        <button class="button how-to-play" onclick="playClickSound(); showHowToPlay()">遊び方</button>
+        <button class="button study-mode" onclick="playClickSound(); showStudyMode()">勉強モード</button>
+        <button class="button settings" onclick="playClickSound(); showSettings()">設定・問い合わせ</button>
+    </div>
+
+    <div class="container" id="difficulty-screen" style="display: none;">
+        <h2>難易度を選択してください</h2>
+        <button class="button start" onclick="playClickSound(); startGame('初級')">初級</button>
+        <button class="button middle" onclick="playClickSound(); startGame('中級')">中級</button>
+        <button class="button advanced" onclick="playClickSound(); startGame('上級')">上級</button>
+        <button class="button expert" onclick="playClickSound(); startGame('厨級')">厨級</button>
+        <p>※厨級では初級～上級の全ての高校が出題されます</p>
+    </div>
+
+    <div class="container" id="university-screen" style="display: none;">
+        <h2>問題：この高校はどこだ？</h2>
+        <h2>合格者数を知りたい大学を選択してください</h2>
+        <div id="hint-achievement" style="display: block;"></div>
+        <select id="university-select" class="button">
+            <!-- JavaScriptで選択肢を動的に追加 -->
+        </select>
+        <button class="button" onclick="playClickSound(); selectUniversityFromDropdown()">選択する</button>
+    </div>
+
+    <div class="container" id="correct-screen" style="display: none;">
+        <h2>問題：この高校はどこだ？</h2>
+        <div id="correct-school-name"></div>
+        <h3>合格実績</h3>
+        <div id="school-results">
+            <!-- 合格実績はJavaScriptで動的に生成 -->
+        </div>
+        <div id="hint-count"></div>
+        <div class="hint-section">
+            <button class="button" onclick="playClickSound(); selectAdditionalHint()">追加のヒントを選択する</button>
+            <button class="button" onclick="playClickSound(); answer()">回答画面へ進む</button>
+        </div>
+        
+        <div id="correct-message" style="display: none;">
+            <h2>正解！</h2>
+            <div id="correct-school-name-display"></div>
+            <button class="button" onclick="playClickSound(); viewResults()">この高校の進学実績を見る</button>
+            <button class="button" onclick="playClickSound(); startNewGame()">次のゲームへ</button>
+        </div>
+    </div>
+
+    <div class="container" id="answer-screen" style="display: none;">
+        <h2>問題：この高校はどこだ？</h2>
+        <h3>合格実績</h3>
+        <div id="hint-achievement-answer-screen"></div>
+        
+        <h3>地方を選択してください</h3>
+        <select id="region-select" class="button" onchange="populatePrefectureDropdown()">
+            <option value="" disabled selected>選択してください</option>
+            <!-- JavaScriptで地方が動的に追加される -->
+        </select>
+
+        <h3>都道府県を選択してください</h3>
+        <select id="prefecture-select" class="button" onchange="populateSchoolDropdown()">
+            <option value="" disabled selected>選択してください</option>
+            <!-- JavaScriptで都道府県が動的に追加される -->
+        </select>
+        
+        <h3>正解だと思う高校を選択してください</h3>
+        <select id="user-answer" class="button">
+            <option value="" disabled selected>選択してください</option>
+            <!-- JavaScriptで高校名が動的に追加される -->
+        </select>
+
+        <button class="button" onclick="playClickSound(); submitAnswer()">回答する</button>
+        <button class="button" onclick="playClickSound(); goBackToPreviousPage()">前に戻る</button>
+    </div>
+
+    <div class="container" id="result-screen" style="display: none;">
+        <h2>正解！</h2>
+        <div id="result-school-name"></div>
+        <div id="hintaa-count"></div>
+        <div id="answer-count"></div>
+        <button class="button" onclick="playClickSound(); viewResults()">この高校の進学実績を見る</button>
+        <button class="button" onclick="playClickSound(); startNewGame()">次のゲームへ</button>
+    </div>
+
+    <div class="container" id="achievement-screen" style="display: none;">
+        <h2 id="achievement-school-name"></h2>
+        <h3>進学実績</h3>
+        <div id="achievement-results">
+            <!-- 進学実績はJavaScriptで動的に生成 -->
+        </div>
+        <button class="button" onclick="playClickSound(); startNewGame()">次のゲームへ</button>
+    </div>
+
+    <div class="container" id="incorrect-screen" style="display: none;">
+        <div id="user-answer-display"></div>
+        <p>不正解です。もう一度挑戦してください。</p>
+        <div class="hint-section">
+            <button class="button" onclick="playClickSound(); selectAdditionalHint()">追加のヒントを選択する</button>
+            <button class="button" onclick="playClickSound(); retryAnswer()">もう一度回答する</button>
+            <button class="button" onclick="playClickSound(); giveUp()">ギブアップ</button>
+        </div>
+    </div>
+
+    <div class="container" id="give-up-screen" style="display: none;">
+        <h2>正解：<span id="give-up-correct-school-name"></span></h2>
+        <div class="hint-section">
+            <button class="button" onclick="playClickSound(); viewResults()">この高校の進学実績を見る</button>
+            <button class="button" onclick="playClickSound(); startNewGame()">次のゲームへ</button>
+        </div>
+    </div>
+
+    <div class="container" id="how-to-play-screen" style="display: none;">
+        <h2>遊び方</h2>
+        <p>このゲームは進学実績をもとにお題の高校を当てるゲームです。</p>
+        <ol>
+        <li>合格者数を見たい大学を選択してお題の高校からのその大学への合格者数を見ます。これを任意の数繰り返します。</li>
+        <li>お題の高校がどこか分かったら地域→都道府県→高校の順に選択して回答します。</li>
+            <li>回答が正解か不正解かが表示されます。</li>
+        </ol>
+        <p>・不正解の場合は、追加のヒントを選択するか、もう一度回答するか、ギブアップすることができます。</p>
+        <p>・正解またはギブアップした場合、お題の高校の進学実績を見ることができます。</p>
+        <p>以下は実際のプレイ画面の例です（お題が日比谷高校の場合）：</p>
+        <img src="images/play-screen-example.png" alt="実際のプレイ画面" style="max-width: 100%; height: auto;">
+        <button class="button" onclick="playClickSound(); backToStart()">メニューに戻る</button>
+    </div>
+
+    <div class="container" id="study-mode-screen" style="display: none;">
+        <h2>勉強モード</h2>
+        <p>※勉強モードではこのゲームでお題となる高校の進学実績を見ることができます</p>
+        <h3>地方を選択してください</h3>
+        <select id="study-region-select" class="button" onchange="populateStudyPrefectureDropdown()">
+            <option value="" disabled selected>選択してください</option>
+            <!-- JavaScriptで地方が動的に追加される -->
+        </select>
+
+        <h3>都道府県を選択してください</h3>
+        <select id="study-prefecture-select" class="button" onchange="populateStudySchoolDropdown()">
+            <option value="" disabled selected>選択してください</option>
+            <!-- JavaScriptで都道府県が動的に追加される -->
+        </select>
+        
+        <h3>高校を選択してください</h3>
+        <select id="study-user-answer" class="button">
+            <option value="" disabled selected>選択してください</option>
+            <!-- JavaScriptで高校名が動的に追加される -->
+        </select>
+        <button class="button" onclick="playClickSound(); viewStudyResults()">この高校の進学実績を見る</button>
+        <button class="button" onclick="playClickSound(); backToStart()">メニューに戻る</button>
+    </div>
+
+    <div class="container" id="study-achievement-screen" style="display: none;">
+        <h2 id="study-achievement-school-name"></h2>
+        <h3>進学実績</h3>
+        <div id="study-achievement-results">
+            <!-- 進学実績はJavaScriptで動的に生成 -->
+        </div>
+        <button class="button" onclick="playClickSound(); backToStudyMode()">勉強モードに戻る</button>
+    </div>
+
+    <div class="container" id="settings-screen" style="display: none;">
+        <h2>設定・問い合わせ</h2>
+        <h3>効果音の音量</h3>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="1" onchange="adjustVolume()">
+        <label for="volume-slider">音量: <span id="volume-value">100%</span></label>
+        
+        <!-- Google Formへのリンクを追加 -->
+        <p>問い合わせ、不具合や間違いの報告、ご意見等はこちらのGoogle Formの方へお願いします。いただきました回答はアプリの不具合・間違いの修正、今後のアプリの改善、新機能追加、新アプリの開発に役立たせていただきます。</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfsM4Kll30j9gGfyfyRuYxIRKa0g5E7sY0gqKoQabYCUQE-jw/viewform?usp=header" target="_blank">お問い合わせFormはこちら</a>
+        <p>※個々の対応はしかねる場合がございますのでご了承ください。</p>
+        
+        <button class="button" onclick="playClickSound(); backToStart()">メニューに戻る</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

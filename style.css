@@ -1,0 +1,95 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+    color: white;
+    background-color: #444;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #666;
+}
+
+.hint-section {
+    margin-top: 20px;
+}
+
+.hint {
+    background-color: #fbbc05;
+}
+
+.hint:hover {
+    background-color: #e0a800;
+} 
+
+.button.back.small {
+    width: 12.5%;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+} 
+
+#how-to-play-screen ol {
+    text-align: left;
+    padding-left: 20px;
+} 
+
+#how-to-play-screen {
+    text-align: left; /* 左寄せに設定 */
+} 
+
+#how-to-play-screen h2 {
+    text-align: center; /* 中央揃えに設定 */
+} 
+
+.button.expert {
+    background-color: darkred; /* 厨級ボタンの背景色をどす黒い赤に */
+    border: 3px solid black; /* 禍々しい黒のフレーム */
+    border-radius: 10px; /* フレームの角を丸くする */
+    box-shadow: 0 0 10px black; /* フレームの影を追加 */
+} 
+
+#school-results,
+#correct-school-name-display,
+#hint-achievement-answer-screen {
+    font-size: 20px; /* 合格実績のフォントサイズを大きく設定 */
+    line-height: 1.5; /* 行間を少し広げる */
+} 
+
+#hint-achievement {
+    font-size: 20px; /* 合格実績のフォントサイズを20pxに設定 */
+    line-height: 1.5; /* 行間を少し広げる */
+} 
+
+#correct-screen h3,
+#answer-screen h3 {
+    font-size: 22px; /* 合格実績のフォントサイズを22pxに設定 */
+    line-height: 1.5; /* 行間を少し広げる */
+} 
+
+button {
+    border: none; /* 黒い縁を消すためにボーダーをなしにする */
+    /* 他のスタイルがあればここに追加 */
+} 
