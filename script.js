@@ -688,10 +688,9 @@ function showSettings() {
 }
 
 function selectAdditionalHint() {
-    // correct-screenとincorrect-screenを非表示にする
-    document.getElementById('correct-screen').style.display = 'none'; // correct-screenを非表示
-    document.getElementById('incorrect-screen').style.display = 'none'; // incorrect-screenを非表示
-    
+    // answer-screenを非表示にする
+    document.getElementById('answer-screen').style.display = 'none'; // answer-screenを非表示にする
+
     // university-screenを表示する
     document.getElementById('university-screen').style.display = 'block'; // university-screenを表示
 
